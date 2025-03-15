@@ -1,0 +1,40 @@
+Para desplegar en render.com
+uvicorn main:app --host 0.0.0.0 --port $PORT
+
+Desplegar con gunicorn:
+Para configurar gunicorn con un servidor ASGI como Uvicorn en Render, debes seguir estos pasos:
+
+Asegúrate de tener gunicorn y uvicorn en tu archivo de requisitos: Añade gunicorn y uvicorn[standard] a tu archivo requirements.txt para asegurarte de que ambos paquetes estén instalados en tu entorno de producción. Esto puede verse así:
+
+gunicorn uvicorn[standard]
+Configurar el comando de inicio para Render: En lugar de usar directamente uvicorn, usarás gunicorn con un worker clase UvicornWorker para ejecutar tu aplicación. La instrucción de inicio para tu aplicación en Render podría ser algo como esto:
+
+gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker
+
+
+La segunda opción, si se quiere mantener uvicorn:
+
+uvicorn directamente como servidor en producción, aunque generalmente se recomienda gunicorn por sus características robustas de manejo de múltiples workers y una mejor gestión de los procesos. Sin embargo, uvicorn es un servidor ASGI liviano y rápido que es perfectamente capaz de manejar aplicaciones en producción, especialmente si tu aplicación no espera una carga extremadamente alta o no requiere el manejo de múltiples procesos.
+
+
+Para usar uvicorn en Render u otros entornos de producción, puedes configurar el comando de arranque sin el flag --reload (que es para desarrollo y permite la recarga automática del código al detectar cambios). Un comando de arranque típico para uvicorn en producción podría verse así:
+
+uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+
+Aquí están los detalles de la configuración:
+
+main:app: Asegúrate de que main es tu archivo donde se crea la instancia de la aplicación y app es la instancia de la aplicación.
+
+--host 0.0.0.0: Esto asegura que el servidor esté accesible desde todas las direcciones IP.
+
+--port 8000: Especifica el puerto en el cual el servidor estará escuchando.
+
+--workers 4: Esto inicia múltiples instancias de uvicorn para manejar solicitudes concurrentes, similar a cómo gunicorn maneja sus workers. Esto es útil para aprovechar múltiples CPU cores. Asegúrate de ajustar el número de workers según los recursos disponibles y la carga esperada.
+
+echo "# test_todo" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/claudioaltamiranda/test_todo.git
+git push -u origin main
